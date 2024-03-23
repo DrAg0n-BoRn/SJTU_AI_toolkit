@@ -1,0 +1,10 @@
+.DS_Store
+.vscode
+__pycache__
+dist
+dist_old
+build
+*.spec
+installer.txt
+venv
+model_weights.pth
