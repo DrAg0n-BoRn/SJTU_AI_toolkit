@@ -18,7 +18,9 @@ Karl Luigi Loza Vidaurre<sup>1,2</sup>, Zhilong Wang<sup>1,2</sup>, and Jinjin L
 
 [Imagery Test Dataset](https://drive.google.com/drive/folders/1hj8oGvTsWRKHLHfJr1pET0T4iQGyRfU1?usp=drive_link)
 
-[Model Weights](https://drive.google.com/file/d/11Qexc5nSTj1MEq__2PR5g6x8Fp6TUh2g/view?usp=drive_link)
+[Model Weights](https://drive.google.com/file/d/1Y2NU-M83mKhaQd_M8ri6QsWqFr4Fy5S_/view?usp=sharing)
+
+[Sample APP (Mac ARM64)](https://drive.google.com/file/d/1NB5AfEVMFj3RJuRF0egAGThWK6_UtybC/view?usp=drive_link)
 
 ---
 
