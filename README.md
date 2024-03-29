@@ -1,8 +1,8 @@
-# Interpretable AI Toolkit to Capture Latent Features from Electron Microscope Images
+# Interpretable AI Toolkit to Visualize Latent Features from Electron Microscope Images
 
 ## Abstract
 
-lorem ipsum.
+Microscale imaging, which includes the study of solid electrolyte interphase and alloy substances, requires computational methods that match the remarkable quality of modern imagery. Here, we introduce a novel approach that provides precise analysis and visualization of latent features in sample microscale imagery of two types of substances: solid electrolyte interphase and alloys. We implemented this approach using a combination of contemporary artificial intelligence techniques as well as well-established computational algorithms. Our approach leverages some digital image processing algorithms supplemented by supervised machine learning algorithms. The classification model yielded a weighted accuracy of 88%, afterwards a class activation mapping technique was implemented on top of it to better understand the reasoning behind this classification process and provide further insights on the imagery data itself. Additionally, we explored unsupervised machine learning using a k-means clustering algorithm. To package and distribute the toolkit, a user-friendly graphical user interface (GUI) was implemented. The resulting image visualizations are satisfactory and position the toolkit to make significant contributions to microscale imaging research in the field of material characterization and electron microscopy. The trained model serves as a commencing point for further research using artificial intelligence techniques such as transfer learning. The implications of this work are far-reaching, offering a streamlined and efficient tool for researchers in the field.
 
 ## Authors
 
