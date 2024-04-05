@@ -7,4 +7,4 @@ build
 *.spec
 installer.txt
 venv
-model_weights.pth
+*.pth
