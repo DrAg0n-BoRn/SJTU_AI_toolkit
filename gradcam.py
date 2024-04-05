@@ -70,7 +70,7 @@ def create_model():
     # Load alexnet and modify layers
     alexnet = models.alexnet(weights=None)
     alexnet.features[0] = nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2)
-    alexnet.classifier[6] = nn.Linear(in_features=4096, out_features=3, bias=True)
+    alexnet.classifier[6] = nn.Linear(in_features=4096, out_features=2, bias=True)
     
     # Load weights in a system-independent way
     path = os.path.join(cwd, "model_weights.pth")
@@ -125,8 +125,6 @@ def get_gradients(img_model, model):
     # Prediction
     class_pred = logits.argmax(dim=1)
     if class_pred == 0:
-        prediction = "Alloy"
-    elif class_pred == 1:
         prediction = "SEI Dendritic"
     else:
         prediction = "SEI Spheroids"
