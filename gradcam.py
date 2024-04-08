@@ -10,16 +10,27 @@ import sys
 
 
 # Settings
-SIZE_REQUIREMENT = 256      # Alexnet
 FIGSIZE = (8, 4)
 DPI = 150
 valid_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.ppm', '.pgm', '.pbm', '.pfm']
+
+
+# --------------------------------------------
 # For PyInstaller
 if getattr(sys, 'frozen', False):
     cwd = sys._MEIPASS # type: ignore
 else:
     cwd = os.getcwd()
 
+
+# Custom AlexNet
+def custom_alexnet():
+    alexnet = models.alexnet(weights=None)
+    alexnet.features[0] = nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2)
+    alexnet.classifier[6] = nn.Linear(in_features=4096, out_features=2, bias=True)
+    return alexnet
+
+SIZE_REQUIREMENT = 256      # Alexnet
 
 # Load image PIL
 def read_image_pil(path):
@@ -67,10 +78,8 @@ def transform_image(img):
 
 # Load model + model weights. Insert hook.
 def create_model():
-    # Load alexnet and modify layers
-    alexnet = models.alexnet(weights=None)
-    alexnet.features[0] = nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2)
-    alexnet.classifier[6] = nn.Linear(in_features=4096, out_features=2, bias=True)
+    # Load alexnet
+    alexnet = custom_alexnet()
     
     # Load weights in a system-independent way
     path = os.path.join(cwd, "model_weights.pth")
