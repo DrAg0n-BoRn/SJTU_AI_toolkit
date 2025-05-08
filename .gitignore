@@ -8,3 +8,5 @@ build
 installer.txt
 venv
 *.pth
+.python-info
+.python-version
