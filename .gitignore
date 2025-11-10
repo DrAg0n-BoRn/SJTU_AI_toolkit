@@ -10,3 +10,12 @@ venv
 *.pth
 .python-info
 .python-version
+dataset/
+checkpoints/
+metrics/
+artifacts/
+validation/
+Original_Images/
+backups/
+results/
+*.egg-info

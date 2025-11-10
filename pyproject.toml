@@ -1,0 +1,37 @@
+[project]
+name = "visual_ccc"
+version = "2.0.0"
+description = "A scientific visualization software"
+authors = [
+    { name = "Karl Luigi Loza Vidaurre", email = "luigiloza@gmail.com" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+dependencies = [
+    "FreeSimpleGUI",
+    "dragon-ml-toolbox",
+    "torch",
+    "numpy",
+    "Pillow",
+    "matplotlib",
+    "opencv-python",
+    "torchvision",
+    "scikit-learn",
+    "scikit-image"
+]
+
+[project.scripts]
+# Creates a command-line script to run the app for development
+# e.g., 'pip install -e .' then just type 'run_visual_ccc'
+"run_visual_ccc" = "visual_ccc.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/DrAg0n-BoRn/SJTU_AI_toolkit"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["visual_ccc"]

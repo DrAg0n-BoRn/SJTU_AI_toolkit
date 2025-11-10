@@ -1,6 +1,6 @@
-import mygui
-import gradcam
-import image_a
+from . import mygui
+from . import gradcam
+from . import image_a
 
 
 def main():
@@ -19,6 +19,10 @@ def main():
     gray = None
     gray_standardized = None
     clusters = None
+    # Load model in evaluation mode
+    model = gradcam.create_model()
+    model.cpu()
+    model.eval()
     
     # Window
     window = mygui.main_window()
@@ -59,7 +63,7 @@ def main():
             window.find_element('-GRADCAM-').update(disabled=True, visible=False)
             # Grad-CAM process
             img_model, img_display = gradcam.transform_image(img_cam)
-            model = gradcam.create_model()
+            # model = gradcam.create_model()
             activations, prediction = gradcam.get_gradients(img_model, model)
             heatmap = gradcam.process_heatmap(activations, img_display)
             gradcam_figure = gradcam.plot_gradcam(img_display, heatmap)

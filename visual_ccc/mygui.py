@@ -81,7 +81,7 @@ def main_window():
         [tabgroup]
     ]
     
-    window = sg.Window(title="Feature Visualization", layout=layout, resizable=False, finalize=True)
+    window = sg.Window(title="VISUAL-CCC", layout=layout, resizable=False, finalize=True)
     window.set_min_size(window.size)
     
     return window

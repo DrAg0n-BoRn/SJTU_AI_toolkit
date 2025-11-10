@@ -6,31 +6,25 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy
 import os
-import sys
+from .paths import PM
+from ml_tools._keys import PyTorchCheckpointKeys
 
 
 # Settings
 FIGSIZE = (8, 4)
 DPI = 150
 valid_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.ppm', '.pgm', '.pbm', '.pfm']
+SIZE_REQUIREMENT = 256      # Alexnet
 
-
-# --------------------------------------------
-# For PyInstaller
-if getattr(sys, 'frozen', False):
-    cwd = sys._MEIPASS # type: ignore
-else:
-    cwd = os.getcwd()
-
-
+# ------------------------------------------
 # Custom AlexNet
 def custom_alexnet():
     alexnet = models.alexnet(weights=None)
     alexnet.features[0] = nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2)
-    alexnet.classifier[6] = nn.Linear(in_features=4096, out_features=2, bias=True)
+    saved_in_features: int = alexnet.classifier[6].in_features # type: ignore
+    alexnet.classifier[6] = nn.Linear(in_features=saved_in_features, out_features=1, bias=True) # in_features=4096
     return alexnet
 
-SIZE_REQUIREMENT = 256      # Alexnet
 
 # Load image PIL
 def read_image_pil(path):
@@ -82,9 +76,9 @@ def create_model():
     alexnet = custom_alexnet()
     
     # Load weights in a system-independent way
-    path = os.path.join(cwd, "model_weights.pth")
-    trained_weights = torch.load(path, map_location=torch.device('cpu'))
-    alexnet.load_state_dict(trained_weights)
+    model_state_path = PM.model_weights
+    trained_weights_dict = torch.load(model_state_path, map_location=torch.device('cpu'))
+    alexnet.load_state_dict(trained_weights_dict[PyTorchCheckpointKeys.MODEL_STATE])
     
     # Insert a hook into the model
     class AlexnetHook(nn.Module):
@@ -128,15 +122,15 @@ def create_model():
 
 # Get gradients and activations
 def get_gradients(img_model, model):
-    model.eval()
+    # model.eval()
     logits = model(img_model)
     
     # Prediction
     class_pred = logits.argmax(dim=1)
     if class_pred == 0:
-        prediction = "SEI Dendritic"
+        prediction = "Dendrites"
     else:
-        prediction = "SEI Spheroids"
+        prediction = "Spheroids"
     
     # Backpropagate the predicted class
     logits[:, class_pred].backward()
@@ -171,7 +165,7 @@ def process_heatmap(activations, img_display):
     heatmap_avg /= torch.max(heatmap_avg)
     
     # Resize heatmap to match image dimensions
-    heatmap_resized = Image.fromarray(heatmap_avg.cpu().numpy()).resize(img_display.size, Image.BICUBIC)
+    heatmap_resized = Image.fromarray(heatmap_avg.cpu().numpy()).resize(img_display.size, Image.BICUBIC) # type: ignore
 
     # Convert heatmap to numpy array
     heatmap_resized_np = numpy.array(heatmap_resized)

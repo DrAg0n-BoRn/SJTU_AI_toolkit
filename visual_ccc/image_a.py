@@ -1,7 +1,7 @@
 import numpy
 import cv2
 from skimage.feature import graycomatrix, graycoprops
-from sklearn.cluster import KMeans, DBSCAN
+from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
