@@ -1,6 +1,6 @@
-from . import mygui
-from . import gradcam
-from . import image_a
+from visual_ccc import mygui
+from visual_ccc import gradcam
+from visual_ccc import image_a
 
 
 def main():

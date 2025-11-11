@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy
 import os
-from .paths import PM
+from visual_ccc.paths import PM
 from ml_tools._keys import PyTorchCheckpointKeys
 from typing import Optional
 
