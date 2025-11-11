@@ -159,9 +159,10 @@ def get_gradients(img_model, model, class_map):
     activations_avg = model.get_activations(img_model).detach()
 
     # weight the output channels (final layer) by the corresponding gradients
-    output_channels = SIZE_REQUIREMENT 
-    for i in range(output_channels):
-        activations_avg[:, i, :, :] *= average_gradients[i]
+    # Reshape grads to [1, 256, 1, 1] for broadcasting
+    average_gradients = average_gradients.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
+    # Multiply activations [1, 256, H, W] by grads [1, 256, 1, 1]
+    activations_avg *= average_gradients
         
     return activations_avg, prediction
 
@@ -237,5 +238,8 @@ def plot_gradcam(img_display, heatmap_resized_np):
     axs[1].imshow(heatmap_resized_np, alpha=0.5, cmap='jet')
     axs[1].title.set_text("Grad-CAM Heatmap")
     axs[1].axis('off')
+    
+    # Adjust subplot params to reduce padding
+    fig.subplots_adjust(left=0.01, right=0.99, bottom=0.01, top=0.90, wspace=0.1)
     
     return fig
