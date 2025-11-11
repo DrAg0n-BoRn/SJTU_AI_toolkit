@@ -36,7 +36,7 @@ def read_image_cv(path):
 
 
 # Image Analysis: Grayscale - Image segmentation - Texture
-def image_analysis(img):
+def image_segmentation(img, threshold: int=127):
     # Resize image
     ratio = OUTPUT_SIZE / img.shape[1]
     dim = (OUTPUT_SIZE, int(img.shape[0] * ratio))
@@ -47,11 +47,15 @@ def image_analysis(img):
         gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
     else:
         gray = resized
-        
+
     # Perform image segmentation (simple threshold)
-    _, segmented = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+    _thresh, segmented = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
     
-    # Calculate GLCM (Gray Level Co-occurrence Matrix) to get texture features
+    return gray, segmented
+
+
+# Calculate GLCM (Gray Level Co-occurrence Matrix) to get texture features
+def image_texture(segmented):
     glcm = numpy.zeros_like(segmented, dtype=float)
     contrast = numpy.zeros_like(segmented, dtype=float)
 
@@ -67,11 +71,16 @@ def image_analysis(img):
             glcm[i,j] = glcm_window[1,0,0,0]  # store GLCM values
             contrast[i,j] = contrast_window[0,0]  # store contrast values
     
+    return contrast
+
+
+# standardize image pixel values
+def standardize_image(gray):
     # Standardize values in gray
     scaler = StandardScaler()
     gray_standardized = scaler.fit_transform(gray.reshape(-1,1))
     
-    return gray, segmented, contrast, gray_standardized
+    return gray_standardized
 
 
 # Plot gray, segmented and texture

@@ -8,6 +8,7 @@ import numpy
 import os
 from .paths import PM
 from ml_tools._keys import PyTorchCheckpointKeys
+from typing import Optional
 
 
 # Settings
@@ -77,9 +78,14 @@ def create_model():
     
     # Load weights in a system-independent way
     model_state_path = PM.model_weights
-    trained_weights_dict = torch.load(model_state_path, map_location=torch.device('cpu'))
+    trained_weights_dict: dict = torch.load(model_state_path, map_location=torch.device('cpu'))
     alexnet.load_state_dict(trained_weights_dict[PyTorchCheckpointKeys.MODEL_STATE])
     
+    # Load class_map if present
+    class_map: Optional[dict[str,int]] = None
+    if PyTorchCheckpointKeys.CLASS_MAP in trained_weights_dict.keys():
+        class_map = trained_weights_dict[PyTorchCheckpointKeys.CLASS_MAP]
+
     # Insert a hook into the model
     class AlexnetHook(nn.Module):
         def __init__(self):
@@ -117,22 +123,66 @@ def create_model():
             return self.cnn(x)
     
     # Create and return an instance
-    return AlexnetHook()
+    return AlexnetHook(), class_map
     
 
 # Get gradients and activations
-def get_gradients(img_model, model):
+def get_gradients(img_model, model, class_map):
+    index_to_str = {v:k for k,v in class_map.items()}
+    
     # model.eval()
     logits = model(img_model)
     
-    # Prediction
-    class_pred = logits.argmax(dim=1)
-    if class_pred == 0:
-        prediction = "Dendrites"
-    else:
-        prediction = "Spheroids"
+    # Get the single score from the model output (shape [1, 1])
+    score = logits[0, 0]
     
-    # Backpropagate the predicted class
+    # Prediction
+    if score <= 0:
+        prediction = index_to_str.get(0, "Class 0")
+        # Backpropagate the negative score to see what makes it "more negative"
+        target_for_grad = -score
+    else:
+        prediction = index_to_str.get(1, "Class 1")
+        # Backpropagate the positive score to see what makes it "more positive"
+        target_for_grad = score
+    
+    # Backpropagate the correct target
+    target_for_grad.backward()
+
+    # Get gradients
+    gradients = model.get_grads()
+
+    # Pool the gradients across the channels
+    average_gradients = torch.mean(gradients, dim=[0, 2, 3])
+
+    # Get activations of the last convolutional layer
+    activations_avg = model.get_activations(img_model).detach()
+
+    # weight the output channels (final layer) by the corresponding gradients
+    output_channels = SIZE_REQUIREMENT 
+    for i in range(output_channels):
+        activations_avg[:, i, :, :] *= average_gradients[i]
+        
+    return activations_avg, prediction
+
+
+def get_gradients_multiclass(img_model, model, class_map):
+    index_to_str = {v:k for k,v in class_map.items()}
+
+    # model.eval()
+    # Logits will have shape [1, 3] from a 3-class model
+    logits = model(img_model)
+    
+    # Prediction:
+    # Find the index of the highest score
+    class_pred_tensor = logits.argmax(dim=1)
+    class_pred = class_pred_tensor.item()
+    
+    # Get the string name for the predicted class
+    prediction = index_to_str.get(class_pred, "Unknown")
+    
+    # Backpropagate the score for the predicted class
+    # This tells us which pixels contributed most to *this specific class*
     logits[:, class_pred].backward()
 
     # Get gradients
@@ -145,7 +195,7 @@ def get_gradients(img_model, model):
     activations_avg = model.get_activations(img_model).detach()
 
     # weight the output channels (final layer) by the corresponding gradients
-    output_channels = 256  # Alexnet
+    output_channels = SIZE_REQUIREMENT
     for i in range(output_channels):
         activations_avg[:, i, :, :] *= average_gradients[i]
         
@@ -178,12 +228,12 @@ def plot_gradcam(img_display, heatmap_resized_np):
     fig, axs = plt.subplots(nrows=1, ncols=2, figsize=FIGSIZE, dpi=DPI)
     
     # Plot original image
-    axs[0].imshow(img_display)
+    axs[0].imshow(img_display, cmap='gray')
     axs[0].title.set_text("Input Image")
     axs[0].axis('off')
     
     # Plot heatmap overlapping image
-    axs[1].imshow(img_display, alpha=0.5)
+    axs[1].imshow(img_display, alpha=0.5, cmap='gray')
     axs[1].imshow(heatmap_resized_np, alpha=0.5, cmap='jet')
     axs[1].title.set_text("Grad-CAM Heatmap")
     axs[1].axis('off')
