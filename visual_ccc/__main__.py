@@ -96,6 +96,8 @@ def main():
             # Continue process
             contrast = values[event]
             images_figure = image_a.plot_image_analysis(gray, segmented, contrast)
+            # save standardized version for later use in clustering
+            gray_standardized = image_a.standardize_image(gray)
             # plot
             figure_canvas_agg_image, toolbar_image = mygui.draw_figure(canvas=window.find_element('-IMG_CANVAS-').TKCanvas, figure=images_figure,     # type: ignore
                                                                     figure_canvas_agg=figure_canvas_agg_image, toolbar=toolbar_image) 
@@ -115,7 +117,6 @@ def main():
                 else:
                     window.find_element("-CLUSTER_ERROR-").update(visible=False) # type: ignore
                     # Perform clustering
-                    gray_standardized = image_a.standardize_image(gray)
                     clusters = image_a.image_clustering(gray_standardized, n_clusters)
                     cluster_figure = image_a.plot_image_clustering(clusters, gray)
                     # Plot
