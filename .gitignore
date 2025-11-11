@@ -19,3 +19,5 @@ Original_Images/
 backups/
 results/
 *.egg-info
+*.ico
+*.icns
