@@ -1,6 +1,7 @@
 from visual_ccc import mygui
 from visual_ccc import gradcam
 from visual_ccc import image_a
+import multiprocessing
 
 
 def main():
@@ -140,4 +141,5 @@ def main():
 
 
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     main()
