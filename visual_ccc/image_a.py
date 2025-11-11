@@ -7,10 +7,11 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 import os
+from joblib import Parallel, delayed
 
 
 # Settings
-OUTPUT_SIZE = 256   # 512 = 3 minutes to process
+OUTPUT_SIZE = 512
 FIGSIZE_L = (10, 5)
 FIGSIZE_S = (4, 4)
 DPI = 150
@@ -49,27 +50,53 @@ def image_segmentation(img, threshold: int=127):
         gray = resized
 
     # Perform image segmentation (simple threshold)
-    _thresh, segmented = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+    # _thresh, segmented = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+    
+    # Perform image segmentation (Otsu's Binarization)
+    # Otsu's method finds the best value and return it in _thresh.
+    _thresh, segmented = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     
     return gray, segmented
 
 
+# Helper function to compute contrast for a single ROW (for parallel processing)
+def _compute_contrast_row(segmented, i, window_size, cols):
+    ws_h = window_size // 2
+    contrast_row = numpy.zeros((cols,), dtype=float)
+    
+    for j in range(ws_h, cols - ws_h):
+        # Extract window
+        window = segmented[i-ws_h : i+ws_h+1, j-ws_h : j+ws_h+1]
+        
+        # Scale to 0-1 and use levels=2
+        window_norm = (window // 255).astype(numpy.uint8)
+        
+        # Calculate GLCM on the 2-level normalized window
+        glcm_window = graycomatrix(window_norm, [1], [0], levels=2, symmetric=True, normed=True)
+        contrast_window = graycoprops(glcm_window, 'contrast')
+        contrast_row[j] = contrast_window[0,0]
+        
+    return i, contrast_row
+
+
 # Calculate GLCM (Gray Level Co-occurrence Matrix) to get texture features
 def image_texture(segmented):
-    glcm = numpy.zeros_like(segmented, dtype=float)
     contrast = numpy.zeros_like(segmented, dtype=float)
-
-    # Define the window size for computing GLCM
     window_size = 5
+    ws_h = window_size // 2
+    rows, cols = segmented.shape
 
-    # Compute GLCM and contrast for each window of pixels
-    for i in range(window_size//2, segmented.shape[0]-window_size//2):
-        for j in range(window_size//2, segmented.shape[1]-window_size//2):
-            window = segmented[i-window_size//2:i+window_size//2+1, j-window_size//2:j+window_size//2+1] # type: ignore
-            glcm_window = graycomatrix(window, [1], [0], 256, symmetric=True, normed=True)
-            contrast_window = graycoprops(glcm_window, 'contrast')
-            glcm[i,j] = glcm_window[1,0,0,0]  # store GLCM values
-            contrast[i,j] = contrast_window[0,0]  # store contrast values
+    # Create a list of all rows to process
+    row_indices = range(ws_h, rows - ws_h)
+
+    # Run in parallel (n_jobs=-1 uses all available cores) (use threads to avoid freeze bombs on deployment)
+    results = Parallel(n_jobs=-1, prefer="threads")(
+        delayed(_compute_contrast_row)(segmented, i, window_size, cols) for i in row_indices
+    )
+
+    # Reconstruct the contrast image from results
+    for i, c_row in results: # type: ignore
+        contrast[i, :] = c_row
     
     return contrast
 
@@ -102,6 +129,9 @@ def plot_image_analysis(gray, segmented, contrast):
     axs[2].imshow(contrast, cmap='hot')
     axs[2].title.set_text('Texture Analysis')
     axs[2].axis('off')
+    
+    # Adjust subplot params to reduce padding
+    fig.subplots_adjust(left=0.01, right=0.99, bottom=0.01, top=0.95, wspace=0.1)
     
     return fig
 
