@@ -52,6 +52,10 @@ build_mac:
 	  --include-module=_json \
 	  $(MAIN_SCRIPT)
 
+# Windows
+# --windows-console-mode=disable | attach
+# --include-module=_json is built-in in Windows nuitka
+
 # Build target for Windows
 build_windows:
 	@echo "--- Building Windows executable with Nuitka ---"
@@ -60,12 +64,12 @@ build_windows:
 	  --output-dir=dist \
 	  --output-filename="$(EXE_NAME)" \
 	  --product-name="$(EXE_NAME)" \
-	  --windows-disable-console \
+	  --product-version="2.0.0.0" \
+	  --windows-console-mode=disable \
 	  --windows-icon-from-ico="$(ICON_WIN)" \
 	  --include-data-dir="$(FILES_DIR)=$(FILES_DIR)" \
 	  --enable-plugin=tk-inter \
 	  --module-parameter=torch-disable-jit=yes \
-	  --include-module=_json \
 	  $(MAIN_SCRIPT)
 
 # Build target for Linux
