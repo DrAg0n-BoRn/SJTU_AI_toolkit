@@ -1,5 +1,6 @@
 .DS_Store
 .vscode
+.venv
 __pycache__
 dist
 dist_old
@@ -8,8 +9,6 @@ build
 installer.txt
 venv
 *.pth
-.python-info
-.python-version
 dataset/
 checkpoints/
 metrics/

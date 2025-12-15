@@ -10,7 +10,6 @@ PM = DragonPathManager(
 PM.artifacts = PM.results / "artifacts"
 PM.checkpoints = PM.results / "checkpoints"
 PM.metrics = PM.results / "metrics"
-PM.validation = PM.results / "validation"
 PM.original_images = PM.ROOT / "Original_Images"
 
 PM.transform_recipe_file = PM.artifacts / "transform_recipe.json"

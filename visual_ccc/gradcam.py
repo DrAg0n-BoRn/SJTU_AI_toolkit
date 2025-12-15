@@ -7,7 +7,7 @@ from PIL import Image
 import numpy
 import os
 from visual_ccc.paths import PM
-from ml_tools._keys import PyTorchCheckpointKeys
+from ml_tools.keys import FinalizedFileKeys
 from typing import Optional
 
 
@@ -79,12 +79,12 @@ def create_model():
     # Load weights in a system-independent way
     model_state_path = PM.model_weights
     trained_weights_dict: dict = torch.load(model_state_path, map_location=torch.device('cpu'))
-    alexnet.load_state_dict(trained_weights_dict[PyTorchCheckpointKeys.MODEL_STATE])
+    alexnet.load_state_dict(trained_weights_dict[FinalizedFileKeys.MODEL_WEIGHTS])
     
     # Load class_map if present
     class_map: Optional[dict[str,int]] = None
-    if PyTorchCheckpointKeys.CLASS_MAP in trained_weights_dict.keys():
-        class_map = trained_weights_dict[PyTorchCheckpointKeys.CLASS_MAP]
+    if FinalizedFileKeys.CLASS_MAP in trained_weights_dict.keys():
+        class_map = trained_weights_dict[FinalizedFileKeys.CLASS_MAP]
 
     # Insert a hook into the model
     class AlexnetHook(nn.Module):

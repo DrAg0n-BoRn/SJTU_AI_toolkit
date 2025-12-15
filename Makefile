@@ -3,7 +3,6 @@
 # ==============================================================================
 
 # --- Variables ---
-PYTHON      := python
 APP_NAME    := visual_ccc
 EXE_NAME    := VisualCCC
 # Nuitka:WARNING: To compile a package with a '__main__' module, specify its containing directory but, not the '__main__.py' itself.
@@ -13,6 +12,7 @@ ICON_MAC    := $(FILES_DIR)/icon.icns
 ICON_WIN    := $(FILES_DIR)/icon.ico
 ICON_DMG    := $(FILES_DIR)/apple.icns
 DMG_NAME    := $(APP_NAME)-mac
+WIN_VERSION := 3.0.0.0
 
 # --- Targets ---
 
@@ -39,7 +39,7 @@ help:
 # Build target for macOS
 build_mac:
 	@echo "--- Building macOS .app bundle with Nuitka ---"
-	$(PYTHON) -m nuitka \
+	uv run python -m nuitka \
 	  --standalone \
 	  --output-dir=dist \
 	  --output-filename="$(EXE_NAME)" \
@@ -59,12 +59,12 @@ build_mac:
 # Build target for Windows
 build_windows:
 	@echo "--- Building Windows executable with Nuitka ---"
-	$(PYTHON) -m nuitka \
+	uv run python -m nuitka \
 	  --standalone \
 	  --output-dir=dist \
 	  --output-filename="$(EXE_NAME)" \
 	  --product-name="$(EXE_NAME)" \
-	  --product-version="2.0.0.0" \
+	  --product-version="$(WIN_VERSION)" \
 	  --windows-console-mode=disable \
 	  --windows-icon-from-ico="$(ICON_WIN)" \
 	  --include-data-dir="$(FILES_DIR)=$(FILES_DIR)" \
@@ -75,7 +75,7 @@ build_windows:
 # Build target for Linux
 build_linux:
 	@echo "--- Building Linux executable with Nuitka ---"
-	$(PYTHON) -m nuitka \
+	uv run python -m nuitka \
 	  --standalone \
 	  --output-dir=dist \
 	  --output-filename="$(EXE_NAME)" \
