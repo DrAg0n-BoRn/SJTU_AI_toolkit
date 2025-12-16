@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy
 import os
-from visual_ccc.paths import PM
-from ml_tools.keys import FinalizedFileKeys
+from ml_tools.ML_finalize_handler import FinalizedFileHandler
 from typing import Optional
+
+from visual_ccc.paths import PM
 
 
 # Settings
@@ -77,14 +78,12 @@ def create_model():
     alexnet = custom_alexnet()
     
     # Load weights in a system-independent way
-    model_state_path = PM.model_weights
-    trained_weights_dict: dict = torch.load(model_state_path, map_location=torch.device('cpu'))
-    alexnet.load_state_dict(trained_weights_dict[FinalizedFileKeys.MODEL_WEIGHTS])
+    finalized_file = FinalizedFileHandler(PM.model_weights)
+    
+    alexnet.load_state_dict(finalized_file.model_state_dict) # type: ignore
     
     # Load class_map if present
-    class_map: Optional[dict[str,int]] = None
-    if FinalizedFileKeys.CLASS_MAP in trained_weights_dict.keys():
-        class_map = trained_weights_dict[FinalizedFileKeys.CLASS_MAP]
+    class_map: Optional[dict[str,int]] = finalized_file.class_map
 
     # Insert a hook into the model
     class AlexnetHook(nn.Module):

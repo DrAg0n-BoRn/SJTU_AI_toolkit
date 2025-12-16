@@ -49,11 +49,11 @@ wheels = [
 
 [[package]]
 name = "dragon-ml-toolbox"
-version = "19.8.2"
+version = "19.9.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/28/59/d18d2943f9b827557d4b9a3fb86708aedaec24f0c9a68fd8f5cf27bb6b47/dragon_ml_toolbox-19.8.2.tar.gz", hash = "sha256:f64312bfd1540734015c2407b9c53221bb5382d28ba99d58b1f5c54184d5d0bf", size = 286990, upload-time = "2025-12-15T15:00:36.244Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/49/9e/9d206a8b93faa8ec3b8d010b99d6f3104243814169d389ceae6f90d7eb58/dragon_ml_toolbox-19.9.0.tar.gz", hash = "sha256:acce552b455dde29b587a3129b196aec01aadf60427cff9ba95d72ea904fddba", size = 287548, upload-time = "2025-12-16T11:30:07.358Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/f6/8b8c7b7ff66e35380f5763e2fcc1cfee804871f14359b92671aa626b2b92/dragon_ml_toolbox-19.8.2-py3-none-any.whl", hash = "sha256:28a20e9ac531942e0572417535c2186c94b58f5cda74dc555a4bb3a23e0d0f6e", size = 330454, upload-time = "2025-12-15T15:00:33.259Z" },
+    { url = "https://files.pythonhosted.org/packages/22/cd/9c534544be7db876a4ba51c17837a07a7b30b9390ccc36344b1ac842aa34/dragon_ml_toolbox-19.9.0-py3-none-any.whl", hash = "sha256:3b0c990d448a704154bccf328ba0d25b79cd0882084b698bde2b5bf51f65f871", size = 330994, upload-time = "2025-12-16T11:30:09.515Z" },
 ]
 
 [package.optional-dependencies]
@@ -789,7 +789,7 @@ wheels = [
 
 [[package]]
 name = "visual-ccc"
-version = "3.0.0"
+version = "3.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "dragon-ml-toolbox", extra = ["gui-torch"] },
@@ -811,7 +811,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==19.8.2" },
+    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==19.9.0" },
     { name = "matplotlib" },
     { name = "opencv-python" },
     { name = "pillow" },

@@ -1,6 +1,6 @@
 [project]
 name = "visual_ccc"
-version = "3.0.0"
+version = "3.2.0"
 description = "A scientific visualization software"
 authors = [
     { name = "Karl Luigi Loza Vidaurre", email = "luigiloza@gmail.com" }
@@ -9,7 +9,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = "==3.12.*"
 dependencies = [
-    "dragon-ml-toolbox[gui-torch]==19.8.2",
+    "dragon-ml-toolbox[gui-torch]==19.9.0",
     "Pillow",
     "matplotlib",
     "opencv-python",
