@@ -1,6 +1,6 @@
 [project]
 name = "visual_ccc"
-version = "3.2.0"
+version = "3.3.0"
 description = "A scientific visualization software"
 authors = [
     { name = "Karl Luigi Loza Vidaurre", email = "luigiloza@gmail.com" }
@@ -9,7 +9,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = "==3.12.*"
 dependencies = [
-    "dragon-ml-toolbox[gui-torch]==19.9.0",
+    "dragon-ml-toolbox[gui-torch]==19.10.0",
     "Pillow",
     "matplotlib",
     "opencv-python",
@@ -34,7 +34,7 @@ packages = ["visual_ccc"]
 
 [dependency-groups]
 dev = [
-    "dragon-ml-toolbox[ml]>=19.9.0",
+    "dragon-ml-toolbox[ml]>=19.10.0",
     "nbstripout>=0.8.2",
     "nuitka>=2.8.9",
     "ordered-set>=4.1.0",
