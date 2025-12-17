@@ -34,6 +34,7 @@ packages = ["visual_ccc"]
 
 [dependency-groups]
 dev = [
+    "dragon-ml-toolbox[ml]>=19.9.0",
     "nbstripout>=0.8.2",
     "nuitka>=2.8.9",
     "ordered-set>=4.1.0",
