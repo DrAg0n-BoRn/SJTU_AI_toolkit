@@ -22,3 +22,6 @@ backups/*
 artifacts/*
 checkpoints/*
 metrics/*
+sam_artifacts/*
+sam_inputs/*
+sam_outputs/*
