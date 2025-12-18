@@ -347,11 +347,11 @@ wheels = [
 
 [[package]]
 name = "dragon-ml-toolbox"
-version = "19.10.0"
+version = "19.11.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5d/93/2b818f8a97ed2f4154beca70ca3b8a11e7591fd6d2ab60b4778ed75f48c7/dragon_ml_toolbox-19.10.0.tar.gz", hash = "sha256:5365f53ca2614653aae90441dde397a7ca0f31821ae1cd5b75a8a1403d0522f0", size = 287689, upload-time = "2025-12-17T06:54:18.237Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/65/7b81484acffed8f62ad511afe1fbf5c498a86924f0b1515769a2517a73d3/dragon_ml_toolbox-19.11.0.tar.gz", hash = "sha256:a99f1ef5151684f33768b9a2537ba82ec058a8e100c8a48b08b3303f60558076", size = 289065, upload-time = "2025-12-18T09:33:45.572Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/69/491ed96697ccba1fc2ae2795388628d22422316e5ecf1475b3da5ff25408/dragon_ml_toolbox-19.10.0-py3-none-any.whl", hash = "sha256:c5cf1b9d22af178a0f63068aaaf74a614d04d79543a4bf87abd8c887e9c81466", size = 331044, upload-time = "2025-12-17T06:54:15.692Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/86/d3eddb4c54c9d88b66f381355aecdcedf111c649feca057366fcac8b6c7b/dragon_ml_toolbox-19.11.0-py3-none-any.whl", hash = "sha256:b768483c20148e339273e27bdc770b9ae2c38e8ee90d99a721230ca5f6cd3fb6", size = 332147, upload-time = "2025-12-18T09:33:43.179Z" },
 ]
 
 [package.optional-dependencies]
@@ -2249,7 +2249,7 @@ wheels = [
 
 [[package]]
 name = "visual-ccc"
-version = "3.3.0"
+version = "4.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "dragon-ml-toolbox", extra = ["gui-torch"] },
@@ -2268,13 +2268,12 @@ dev = [
     { name = "nbstripout" },
     { name = "nuitka" },
     { name = "ordered-set" },
-    { name = "sam-2" },
     { name = "zstandard" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==19.10.0" },
+    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==19.11.0" },
     { name = "matplotlib" },
     { name = "opencv-python" },
     { name = "pillow" },
@@ -2286,11 +2285,10 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "dragon-ml-toolbox", extras = ["ml"], specifier = ">=19.10.0" },
+    { name = "dragon-ml-toolbox", extras = ["ml"], specifier = ">=19.11.0" },
     { name = "nbstripout", specifier = ">=0.8.2" },
     { name = "nuitka", specifier = ">=2.8.9" },
     { name = "ordered-set", specifier = ">=4.1.0" },
-    { name = "sam-2", git = "https://github.com/facebookresearch/sam2.git" },
     { name = "zstandard", specifier = ">=0.25.0" },
 ]
 

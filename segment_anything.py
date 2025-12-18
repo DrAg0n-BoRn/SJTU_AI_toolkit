@@ -72,13 +72,16 @@ def build_sam_model(device, postprocessing: bool=True):
     return sam_model
 
 
-def get_generator(sam_model):
+def get_generator(sam_model, device):
     """ Returns a SAM2 mask generator instance."""
     # mask generator
-    mask_generator = SAM2AutomaticMaskGenerator(
-        model=sam_model,
-        **MASK_GENERATOR_PARAMS
-    )
+    if device.type == "cpu":
+        mask_generator = SAM2AutomaticMaskGenerator(model=sam_model)
+    else:
+        mask_generator = SAM2AutomaticMaskGenerator(
+            model=sam_model,
+            **MASK_GENERATOR_PARAMS
+        )
     return mask_generator
 
 
@@ -201,11 +204,9 @@ def check_input_images():
     images_dict: dict[str, Path] = dict()
     
     for valid_extension in VALID_IMG_EXTENSIONS:
-        try:
-            found_images_dict = list_files_by_extension(directory=PM.sam_inputs, extension=valid_extension, verbose=False)
-        except IOError:
-            continue
-        else:
+        found_images_dict = list_files_by_extension(directory=PM.sam_inputs, extension=valid_extension, verbose=False, raise_on_empty=False)
+        
+        if found_images_dict:
             print(f"Found {len(found_images_dict)} {valid_extension.upper()} images.")
             images_dict.update(found_images_dict)
     
@@ -224,11 +225,17 @@ def main():
     # get model
     sam_model = build_sam_model(device=device, postprocessing=True)
     # generator
-    mask_generator = get_generator(sam_model)
+    mask_generator = get_generator(sam_model, device)
     
     count = 0
+    
+    if device.type == "cpu":
+        use_autocast = False
+    else:
+        use_autocast = True
+    
     # Use inference mode and autocast context
-    with torch.inference_mode(), torch.autocast(device.type, dtype=dtype):
+    with torch.inference_mode(), torch.autocast(device.type, dtype=dtype, enabled=use_autocast):
         for image_name, image_path in images_dict.items():
             try:
                 # transform

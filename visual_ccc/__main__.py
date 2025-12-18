@@ -4,6 +4,8 @@ from visual_ccc import image_a
 from visual_ccc import sam_segment
 import multiprocessing
 
+CLASSES_OPTIONS = ["2-class", "3-class"]
+TASK = "3-class"
 
 def main():
     # Initial values
@@ -28,7 +30,7 @@ def main():
     gray_standardized = None
     clusters = None
     # Load model in evaluation mode
-    model, class_map = gradcam.create_model()
+    model, class_map = gradcam.create_model(classes=TASK)
     model.cpu()
     model.eval()
     # Setup SAM
@@ -90,7 +92,12 @@ def main():
             # Grad-CAM process
             img_model, img_display = gradcam.transform_image(img_original_pil)
             # CHOOSE BINARY OR TERNARY MODEL
-            activations, prediction = gradcam.get_gradients_multiclass(img_model, model, class_map)
+            if TASK == "3-class":
+                activations, prediction = gradcam.get_gradients_multiclass(img_model, model, class_map)
+            elif TASK == "2-class":
+                activations, prediction = gradcam.get_gradients(img_model, model, class_map)
+            else:
+                raise RuntimeError("CLASSES must be either '2-class' or '3-class'")
             heatmap = gradcam.process_heatmap(activations, img_display)
             gradcam_figure = gradcam.plot_gradcam(img_display, heatmap)
             # update message
@@ -104,7 +111,8 @@ def main():
             # Disable items
             window.find_element('-IMG_ANALYSIS-').update(disabled=True, visible=False) # type: ignore
             window.find_element('-SAM_BUTTON-').update(disabled=True, visible=False) # type: ignore
-            window.find_element('-PATH_BUTTON-').update(disabled=True, tooltip="Disabled while processing image") # type: ignore
+            window.find_element('-PATH_BUTTON-').update(disabled=True) # type: ignore
+            window.find_element('-PATH_BUTTON-').set_tooltip("Disabled while processing image") # type: ignore
             processing = True
             # save original image
             original_img_array = img_sam.copy()
@@ -114,7 +122,7 @@ def main():
                                                                             device=sam_device,
                                                                             dtype=sam_dtype), 
                                           "-RETURN_SAM_TRIGGER-")
-        elif event == "-RETURN_SAM_TRIGGER-" and original_img_array:
+        elif event == "-RETURN_SAM_TRIGGER-" and original_img_array is not None:
             mygui.notification_popup_sam()
             mask_annotations = values[event]
             # get rendered image
@@ -125,7 +133,8 @@ def main():
             processing = False
             is_sam_processed = True
             # restore buttons
-            window.find_element('-PATH_BUTTON-').update(disabled=False, tooltip=None) # type: ignore
+            window.find_element('-PATH_BUTTON-').update(disabled=False) # type: ignore
+            window.find_element('-PATH_BUTTON-').set_tooltip("Select Image") # type: ignore
             if not is_img_processed:
                 window.find_element('-IMG_ANALYSIS-').update(disabled=False, visible=True) # type: ignore
         
@@ -136,7 +145,8 @@ def main():
             window.find_element('-SAM_BUTTON-').update(disabled=True, visible=False) # type: ignore
             window.find_element('-SECRET_TAB-').update(visible=False) # type: ignore
             window.find_element("-TARGET_BTN-").update(visible=False) # type: ignore
-            window.find_element('-PATH_BUTTON-').update(disabled=True, tooltip="Disabled while processing image") # type: ignore
+            window.find_element('-PATH_BUTTON-').update(disabled=True) # type: ignore
+            window.find_element('-PATH_BUTTON-').set_tooltip("Disabled while processing image") # type: ignore
             processing = True
             # Image Analysis process
             gray, segmented = image_a.image_segmentation(img_cv2)
@@ -155,7 +165,8 @@ def main():
             # Enable clustering
             window.find_element('-SECRET_TAB-').update(visible=True) # type: ignore
             # Restore buttons
-            window.find_element('-PATH_BUTTON-').update(disabled=False, tooltip=None) # type: ignore
+            window.find_element('-PATH_BUTTON-').update(disabled=False) # type: ignore
+            window.find_element('-PATH_BUTTON-').set_tooltip("Select Image") # type: ignore
             processing = False
             is_img_processed = True
             if not is_sam_processed:
@@ -198,4 +209,6 @@ def main():
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
+    if TASK not in CLASSES_OPTIONS:
+        raise RuntimeError(f"TASK must be one of the following options: {CLASSES_OPTIONS}")
     main()

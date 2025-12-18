@@ -1,0 +1,89 @@
+THIRD-PARTY SOFTWARE NOTICES
+------------------------------------------------------------------------------
+This software includes the following third-party open source software components.
+The specific license terms for each component are listed below.
+
+==============================================================================
+1. PyTorch & Torchvision
+   Copyright (c) 2016-     Facebook, Inc            (Adam Paszke)
+   Copyright (c) 2014-     Facebook, Inc            (Soumith Chintala)
+   Copyright (c) 2011-2014 Idiap Research Institute (Ronan Collobert)
+   Copyright (c) 2012-2014 Deepmind Technologies    (Koray Kavukcuoglu)
+   Copyright (c) 2011-2012 NEC Laboratories America (Koray Kavukcuoglu)
+   Copyright (c) 2011-2013 NYU                      (Clement Farabet)
+   Copyright (c) 2006-2010 NEC Laboratories America (Ronan Collobert, Leon Bottou, Iain Melvin, Jason Weston)
+   Copyright (c) 2006      Idiap Research Institute (Samy Bengio)
+   Copyright (c) 2001-2004 Idiap Research Institute (Ronan Collobert, Samy Bengio, Johnny Mariethoz)
+
+   Licensed under the BSD-3-Clause License.
+   https://github.com/pytorch/pytorch/blob/main/LICENSE
+
+==============================================================================
+2. SAM 2 (Segment Anything Model 2)
+   Copyright (c) Meta Platforms, Inc. and affiliates.
+
+   Licensed under the Apache License, Version 2.0
+   https://github.com/facebookresearch/sam2/blob/main/LICENSE
+
+==============================================================================
+3. OpenCV (Open Source Computer Vision Library)
+   Copyright (C) 2000-2023, Intel Corporation, all rights reserved.
+   Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+   Copyright (C) 2009-2016, NVIDIA Corporation, all rights reserved.
+   Copyright (C) 2010-2013, Advanced Micro Devices, Inc., all rights reserved.
+   Copyright (C) 2015-2016, OpenCV Foundation, all rights reserved.
+   Copyright (C) 2015-2016, Itseez Inc., all rights reserved.
+   Copyright (C) 2019-2020, Xperience AI, all rights reserved.
+
+   Licensed under the Apache License, Version 2.0.
+   https://opencv.org/license/
+
+==============================================================================
+4. NumPy
+   Copyright (c) 2005-2023, NumPy Developers.
+
+   Licensed under the BSD-3-Clause License.
+   https://numpy.org/doc/stable/license.html
+
+==============================================================================
+5. Matplotlib
+   Copyright (c) 2012-2023 Matplotlib Development Team; All Rights Reserved.
+
+   Licensed under the Matplotlib License (PSF-based).
+   https://matplotlib.org/stable/users/project/license.html
+
+==============================================================================
+6. Pillow (PIL Fork)
+   Copyright (c) 2010-2024 Alex Clark and contributors.
+
+   Licensed under the HPND License (MIT-like).
+   https://raw.githubusercontent.com/python-pillow/Pillow/main/LICENSE
+
+==============================================================================
+7. Scikit-learn & Scikit-image
+   Copyright (c) 2007-2024 The scikit-learn developers.
+   Copyright (c) 2009-2022 the scikit-image team
+
+   Licensed under the BSD-3-Clause License.
+   https://github.com/scikit-learn/scikit-learn/blob/main/COPYING
+   https://scikit-image.org/docs/0.25.x/license.html 
+
+==============================================================================
+8. Hydra & OmegaConf
+   Copyright (c) Facebook, Inc. and its affiliates.
+   Copyright (c) 2018, Omry Yadan
+
+   Hydra is licensed under the MIT License.
+   OmegaConf is licensed under the BSD-3-Clause License.
+
+   https://github.com/facebookresearch/hydra/blob/main/LICENSE
+   https://github.com/omry/omegaconf/blob/master/LICENSE
+
+==============================================================================
+9. FreeSimpleGUI
+   Copyright (C) 2007 Free Software Foundation, Inc.
+
+   Licensed under the GNU Lesser General Public License v3.0 (LGPLv3).
+   https://github.com/spyoungtech/FreeSimpleGUI/blob/main/license.txt
+
+==============================================================================

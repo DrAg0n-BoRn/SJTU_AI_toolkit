@@ -9,6 +9,7 @@ from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 CLOSED = sg.WIN_CLOSED
 CANVAS_SIZE = (1200, 600)
 CLUSTER_CANVAS_SIZE = (450, 450)
+WINDOW_SIZE = (1350, 850)
 
 
 # A helper function to plot a figure on a canvas with a toolbar
@@ -16,7 +17,9 @@ def draw_figure(canvas, figure, figure_canvas_agg, toolbar):
     # Delete previous figure on canvas
     if figure_canvas_agg:
         figure_canvas_agg.get_tk_widget().forget()
-        plt.close(figure)
+        # Close the OLD figure to free memory
+        plt.close(figure_canvas_agg.figure)
+        # plt.close(figure)
 
     # Delete previous toolbar
     if toolbar:
@@ -37,7 +40,7 @@ def draw_figure(canvas, figure, figure_canvas_agg, toolbar):
 # Create a main window with 2 + 1 tabs
 def main_window():
     # settings
-    sg.set_options(font=("Helvetica", 16))
+    sg.set_options(font=("Helvetica", 16), tooltip_font=("Helvetica", 11))
     sg.theme("Light Green 3")
     
     # Layout
@@ -48,7 +51,7 @@ def main_window():
     ]
     
     tab2 = [
-        [sg.Text(text="Run single-image segmentation using the Segment Anything Model 2 (SAM2).\n\nNote: For batch automation and dataset creation, please use the CUDA-enabled Visual-CCC script on GitHub.", pad=(20,20)),
+        [sg.Text(text="Run single-image segmentation using the Segment Anything Model 2 (SAM2).\n\nNote: For batch automation and mask dataset creation, please use the CUDA-enabled Visual-CCC script on GitHub.", pad=(20,20)),
          sg.Button("Run SAM", key="-SAM_BUTTON-", pad=(20,20), visible=False, disabled=True)],
         [sg.Canvas(size=CANVAS_SIZE, key='-SAM_CANVAS-')]
     ]
@@ -84,14 +87,14 @@ def main_window():
     layout = [
         [sg.Column([[sg.Image(source=disabled_icon, visible=True, key="-IMG_NOTOK-", subsample=2), sg.Image(source=checkmark_icon, visible=False, key="-IMG_OK-", subsample=2)]]), 
          sg.Text(text="No Image Selected", key="-IMG_NAME-", expand_x=True), sg.Push(),
-         sg.Input(disabled=True, key="-IMG_PATH-", visible=False, enable_events=True), sg.FileBrowse(button_text="Select Image", pad=(10,20), key="-PATH_BUTTON-")],
+         sg.Input(disabled=True, key="-IMG_PATH-", visible=False, enable_events=True), sg.FileBrowse(button_text="Select Image", pad=(10,20), key="-PATH_BUTTON-", tooltip="Select Image")],
         [sg.Push(), sg.pin(sg.Text(text="INVALID IMAGE FILE!", key="-WARNING-", visible=False, text_color='red')), sg.Push()],
         [sg.HorizontalSeparator()],
         [tabgroup]
     ]
     
-    window = sg.Window(title="VISUAL-CCC", layout=layout, resizable=False, finalize=True)
-    window.set_min_size(window.size)
+    window = sg.Window(title="VISUAL-CCC", layout=layout, resizable=False, finalize=True, size=WINDOW_SIZE)
+    # window.set_min_size(window.size)
     
     return window
 

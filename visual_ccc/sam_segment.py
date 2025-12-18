@@ -36,6 +36,9 @@ MASK_GENERATOR_PARAMS = {
 # define valid extensions
 VALID_IMG_EXTENSIONS = ['jpg', 'jpeg', 'png', 'bmp', 'tif', 'tiff', 'ppm', 'pgm', 'pbm', 'pfm']
 
+FIGSIZE = (8, 4)
+DPI = 150
+
 #################################
 
 # get the device
@@ -93,7 +96,10 @@ def transform_image(img: Image.Image):
 # Long process
 def generate_mask(mask_generator: SAM2AutomaticMaskGenerator, image: np.ndarray, device, dtype):
     """Long process to generate masks"""
-    with torch.inference_mode(), torch.autocast(device.type, dtype=dtype):
+    # Disable autocast on CPU to avoid warnings
+    enable_autocast = (device.type != 'cpu')
+    
+    with torch.inference_mode(), torch.autocast(device.type, dtype=dtype, enabled=enable_autocast):
         mask_annotations = mask_generator.generate(image)
     
     return mask_annotations
@@ -173,8 +179,8 @@ def render_segmentation(anns: list[dict], original_image_array: np.ndarray, bord
 
     # --- Wrap the Result in a Matplotlib Figure ---
     
-    # Create a figure, let the GUI canvas (pack fill='both') handle the expansion.
-    fig = plt.figure()
+    # Create a figure
+    fig = plt.figure(figsize=FIGSIZE, dpi=DPI)
     
     # subplot that fills the whole figure
     ax = fig.add_subplot(111)
