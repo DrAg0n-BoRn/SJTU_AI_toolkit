@@ -7,7 +7,6 @@ dist_old
 build
 *.spec
 installer.txt
-venv
 *.pth
 Original_Images/
 backups/*
@@ -19,9 +18,7 @@ backups/*
 *.tiff
 *.tif 
 *.svg
-artifacts/*
-checkpoints/*
-metrics/*
+results/*
 sam_artifacts/*
 sam_inputs/*
 sam_outputs/*
