@@ -12,7 +12,7 @@ ICON_MAC    := $(FILES_DIR)/icon.icns
 ICON_WIN    := $(FILES_DIR)/icon.ico
 ICON_DMG    := $(FILES_DIR)/apple.icns
 DMG_NAME    := $(APP_NAME)-mac
-WIN_VERSION := 3.0.0.0
+WIN_VERSION := 4.0.0.0
 
 # --- Targets ---
 

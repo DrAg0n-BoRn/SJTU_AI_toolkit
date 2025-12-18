@@ -7,7 +7,7 @@ from PIL import Image
 import numpy
 import os
 from ml_tools.ML_finalize_handler import FinalizedFileHandler
-from typing import Optional
+from typing import Optional, Literal
 
 from visual_ccc.paths import PM
 
@@ -20,11 +20,16 @@ SIZE_REQUIREMENT = 256      # Alexnet
 
 # ------------------------------------------
 # Custom AlexNet
-def custom_alexnet():
+def custom_alexnet(classes: Literal["2-class", "3-class"]):
     alexnet = models.alexnet(weights=None)
     alexnet.features[0] = nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2)
     saved_in_features: int = alexnet.classifier[6].in_features # type: ignore
-    alexnet.classifier[6] = nn.Linear(in_features=saved_in_features, out_features=1, bias=True) # in_features=4096
+    if classes == "2-class":
+        alexnet.classifier[6] = nn.Linear(in_features=saved_in_features, out_features=1, bias=True) # in_features=4096
+    elif classes == "3-class":
+        alexnet.classifier[6] = nn.Linear(in_features=saved_in_features, out_features=3, bias=True) # in_features=4096
+    else:
+        raise ValueError("classes must be either '2-class' or '3-class'")
     return alexnet
 
 
@@ -73,12 +78,15 @@ def transform_image(img):
 
 
 # Load model + model weights. Insert hook.
-def create_model():
+def create_model(classes: Literal["2-class", "3-class"]):
     # Load alexnet
-    alexnet = custom_alexnet()
+    alexnet = custom_alexnet(classes)
     
     # Load weights in a system-independent way
-    finalized_file = FinalizedFileHandler(PM.model_weights)
+    if classes == "3-class":
+        finalized_file = FinalizedFileHandler(PM.model_weights_three) # for 3-class model
+    elif classes == "2-class":
+        finalized_file = FinalizedFileHandler(PM.model_weights_two)   # for 2-class model
     
     alexnet.load_state_dict(finalized_file.model_state_dict) # type: ignore
     

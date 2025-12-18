@@ -48,9 +48,6 @@ def image_segmentation(img, threshold: int=127):
         gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
     else:
         gray = resized
-
-    # Perform image segmentation (simple threshold)
-    # _thresh, segmented = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
     
     # Perform image segmentation (Otsu's Binarization)
     # Otsu's method finds the best value and return it in _thresh.
