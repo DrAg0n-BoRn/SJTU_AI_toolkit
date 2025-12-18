@@ -15,7 +15,7 @@ PM.metrics = PM.results / "metrics"
 
 PM.sam_inputs = PM.ROOT / "sam_inputs"
 PM.sam_outputs = PM.ROOT / "sam_outputs"
-PM.sam_artifacts = PM.ROOT / "sam_artifacts"
+PM.sam_artifacts = PM.ROOT / "visual_ccc" / "resources"
 
 PM.sam_weights_file = PM.sam_artifacts / "sam2_1_hiera_large.pth"
 PM.transform_recipe_file = PM.artifacts / "transform_recipe.json"

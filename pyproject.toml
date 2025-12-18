@@ -15,7 +15,8 @@ dependencies = [
     "opencv-python",
     "torchvision",
     "scikit-learn",
-    "scikit-image"
+    "scikit-image",
+    "sam-2",
 ]
 
 [project.scripts]
