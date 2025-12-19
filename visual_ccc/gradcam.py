@@ -10,13 +10,14 @@ from ml_tools.ML_finalize_handler import FinalizedFileHandler
 from typing import Optional, Literal
 
 from visual_ccc.paths import PM
+from visual_ccc.visualcnn_model import VisualCNN
 
 
 # Settings
 FIGSIZE = (8, 4)
 DPI = 150
 valid_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.ppm', '.pgm', '.pbm', '.pfm']
-SIZE_REQUIREMENT = 256      # Alexnet
+SIZE_REQUIREMENT = 256   # Alexnet
 
 # ------------------------------------------
 # Custom AlexNet
@@ -77,61 +78,78 @@ def transform_image(img):
     return img_model, img_display
 
 
-# Load model + model weights. Insert hook.
-def create_model(classes: Literal["2-class", "3-class"]):
-    # Load alexnet
-    alexnet = custom_alexnet(classes)
+# Load model + model weights. Insert hook if Alexnet.
+def create_model(classes: Literal["2-class", "3-class"], model_type: Literal["alexnet", "visualcnn"] = "alexnet"):
     
-    # Load weights in a system-independent way
-    if classes == "3-class":
-        finalized_file = FinalizedFileHandler(PM.model_weights_three) # for 3-class model
-    elif classes == "2-class":
-        finalized_file = FinalizedFileHandler(PM.model_weights_two)   # for 2-class model
+    class_map: Optional[dict[str,int]] = None
     
-    alexnet.load_state_dict(finalized_file.model_state_dict) # type: ignore
+    # 1. Initialize & Load
+    if model_type == "alexnet":
+        # Load base alexnet
+        base_model = custom_alexnet(classes)
+        
+        # Load weights
+        try:
+            if classes == "3-class":
+                finalized_file = FinalizedFileHandler(PM.model_weights_three)
+            else:
+                finalized_file = FinalizedFileHandler(PM.model_weights_two)
+            
+            base_model.load_state_dict(finalized_file.model_state_dict) # type: ignore
+            class_map = finalized_file.class_map
+        except Exception as e:
+            print(f"Could not load weights for AlexNet ({classes}).")
+            raise e
+
+        # Define Wrapper for AlexNet (External Hook)
+        class AlexnetHook(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.cnn = base_model.features[:12]
+                self.lastpool = nn.Sequential(base_model.features[12], base_model.avgpool)
+                self.ann = base_model.classifier
+                self.grads = None
+
+            def activations_hook(self, grad):
+                self.grads = grad
+
+            def forward(self, x):
+                x = self.cnn(x)
+                x.register_hook(self.activations_hook)
+                x = self.lastpool(x)
+                x = x.view(1,-1)
+                x = self.ann(x)
+                return x
+
+            def get_grads(self):
+                return self.grads
+
+            def get_activations(self, x):
+                return self.cnn(x)
+        
+        return AlexnetHook(), class_map
+
+    elif model_type == "visualcnn":
+        # Instantiate VisualCNN (Native Support)
+        model = VisualCNN(classes)
+        
+        try:
+            if classes == "2-class":
+                finalized_file = FinalizedFileHandler(PM.model_weights_visualcnn_two)
+            else:
+                finalized_file = FinalizedFileHandler(PM.model_weights_visualcnn_three)
+            
+            model.load_state_dict(finalized_file.model_state_dict) # type: ignore
+            class_map = finalized_file.class_map
+        except Exception as e:
+            print(f"Could not load weights for VisualCNN.")
+            raise e
+            
+        return model, class_map
     
-    # Load class_map if present
-    class_map: Optional[dict[str,int]] = finalized_file.class_map
+    else:
+        raise ValueError(f"Unknown model_type: {model_type}")
 
-    # Insert a hook into the model
-    class AlexnetHook(nn.Module):
-        def __init__(self):
-            super().__init__()
-            # structure until last conv layer
-            self.cnn = alexnet.features[:12]
-            # last pooling layer
-            self.lastpool = nn.Sequential(alexnet.features[12], alexnet.avgpool)
-            # classifier (fully connected network)
-            self.ann = alexnet.classifier
-            # Placeholder for gradients
-            self.grads = None
-
-        # Hook for gradients
-        def activations_hook(self, grad):
-            self.grads = grad
-
-        def forward(self, x):
-            x = self.cnn(x)
-            # register hook
-            hook = x.register_hook(self.activations_hook)
-            # resume cnn
-            x = self.lastpool(x)
-            # resume ann
-            x = x.view(1,-1)
-            x = self.ann(x)
-            return x
-
-        # method for the gradient extraction
-        def get_grads(self):
-            return self.grads
-
-        # method for the activation extraction
-        def get_activations(self, x):
-            return self.cnn(x)
-    
-    # Create and return an instance
-    return AlexnetHook(), class_map
-    
 
 # Get gradients and activations
 def get_gradients(img_model, model, class_map):

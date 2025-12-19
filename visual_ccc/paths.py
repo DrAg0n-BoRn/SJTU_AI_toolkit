@@ -9,6 +9,8 @@ PM = DragonPathManager(
 # 2. Define and register specific file paths.
 PM.model_weights_three = PM.resources / "AlloysDendritesSpheroids.pth"
 PM.model_weights_two = PM.resources / "DendritesSpheroids.pth"
+PM.model_weights_visualcnn_two = PM.resources / "V-DendritesSpheroids.pth"
+PM.model_weights_visualcnn_three = PM.resources / "V-AlloysDendritesSpheroids.pth"
 PM.sam_weights_file = PM.resources / "sam2_1_hiera_large.pth"
 
 # 3. Check status
