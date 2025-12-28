@@ -347,11 +347,11 @@ wheels = [
 
 [[package]]
 name = "dragon-ml-toolbox"
-version = "19.11.0"
+version = "20.3.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/6c/65/7b81484acffed8f62ad511afe1fbf5c498a86924f0b1515769a2517a73d3/dragon_ml_toolbox-19.11.0.tar.gz", hash = "sha256:a99f1ef5151684f33768b9a2537ba82ec058a8e100c8a48b08b3303f60558076", size = 289065, upload-time = "2025-12-18T09:33:45.572Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/d6/906f6d4fa67b42b67e2c536805c6bda10a84e1cf7011a8c30c50476dfc86/dragon_ml_toolbox-20.3.0.tar.gz", hash = "sha256:7292b0637f8f3f068aa8961ddf25189d447b6b116bfe8114cac7af1f21c49fba", size = 293301, upload-time = "2025-12-28T08:43:48.417Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/86/d3eddb4c54c9d88b66f381355aecdcedf111c649feca057366fcac8b6c7b/dragon_ml_toolbox-19.11.0-py3-none-any.whl", hash = "sha256:b768483c20148e339273e27bdc770b9ae2c38e8ee90d99a721230ca5f6cd3fb6", size = 332147, upload-time = "2025-12-18T09:33:43.179Z" },
+    { url = "https://files.pythonhosted.org/packages/4f/2a/6c207e0239e7496be96b2da9078382c71a1347383a11a05e6e7319044934/dragon_ml_toolbox-20.3.0-py3-none-any.whl", hash = "sha256:f22c1f65347c18b181389f443439cd78007592b03b4623938208b3b33d1d9df1", size = 368441, upload-time = "2025-12-28T08:43:45.994Z" },
 ]
 
 [package.optional-dependencies]
@@ -380,7 +380,9 @@ ml = [
     { name = "scikit-learn" },
     { name = "seaborn" },
     { name = "shap" },
+    { name = "torch" },
     { name = "torchmetrics" },
+    { name = "torchvision" },
     { name = "tqdm" },
 ]
 
@@ -2273,7 +2275,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==19.11.0" },
+    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==20.3.0" },
     { name = "matplotlib" },
     { name = "opencv-python" },
     { name = "pillow" },
@@ -2285,7 +2287,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "dragon-ml-toolbox", extras = ["ml"], specifier = ">=19.11.0" },
+    { name = "dragon-ml-toolbox", extras = ["ml"], specifier = "==20.3.0" },
     { name = "nbstripout", specifier = ">=0.8.2" },
     { name = "nuitka", specifier = ">=2.8.9" },
     { name = "ordered-set", specifier = ">=4.1.0" },
