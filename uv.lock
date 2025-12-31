@@ -347,11 +347,11 @@ wheels = [
 
 [[package]]
 name = "dragon-ml-toolbox"
-version = "20.3.0"
+version = "20.5.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ad/d6/906f6d4fa67b42b67e2c536805c6bda10a84e1cf7011a8c30c50476dfc86/dragon_ml_toolbox-20.3.0.tar.gz", hash = "sha256:7292b0637f8f3f068aa8961ddf25189d447b6b116bfe8114cac7af1f21c49fba", size = 293301, upload-time = "2025-12-28T08:43:48.417Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/f5/6b8dfb24a877c20ca7fd3e6e64eb2c7e3e92472cde1e3a4767be432a0ad3/dragon_ml_toolbox-20.5.0.tar.gz", hash = "sha256:44cbafb35d7348625bb4141336f1efa5e25d70a9f570eee07b5120ce9b7fdf6d", size = 294678, upload-time = "2025-12-30T09:13:09.507Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4f/2a/6c207e0239e7496be96b2da9078382c71a1347383a11a05e6e7319044934/dragon_ml_toolbox-20.3.0-py3-none-any.whl", hash = "sha256:f22c1f65347c18b181389f443439cd78007592b03b4623938208b3b33d1d9df1", size = 368441, upload-time = "2025-12-28T08:43:45.994Z" },
+    { url = "https://files.pythonhosted.org/packages/a6/6f/73d763d5577268685fa695db0319749922a06f3446d167e4100de849f43c/dragon_ml_toolbox-20.5.0-py3-none-any.whl", hash = "sha256:d6b706cc38ba9a68f4bc60657e4f5d400ed5d52ffad75d4382fe94a34d27aed1", size = 369829, upload-time = "2025-12-30T09:13:11.399Z" },
 ]
 
 [package.optional-dependencies]
@@ -2275,7 +2275,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==20.3.0" },
+    { name = "dragon-ml-toolbox", extras = ["gui-torch"], specifier = "==20.5.0" },
     { name = "matplotlib" },
     { name = "opencv-python" },
     { name = "pillow" },
@@ -2287,7 +2287,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "dragon-ml-toolbox", extras = ["ml"], specifier = "==20.3.0" },
+    { name = "dragon-ml-toolbox", extras = ["ml"], specifier = "==20.5.0" },
     { name = "nbstripout", specifier = ">=0.8.2" },
     { name = "nuitka", specifier = ">=2.8.9" },
     { name = "ordered-set", specifier = ">=4.1.0" },
